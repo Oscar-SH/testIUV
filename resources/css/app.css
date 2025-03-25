@@ -95,19 +95,20 @@ html {
         @apply min-w-full border rounded-lg shadow-md;
     }
 
-    thead tr{
+    thead tr {
         @apply bg-gray-100 text-left;
     }
 
-    thead th{
+    thead th {
         @apply py-2 px-4 font-semibold text-sm text-gray-600;
     }
 
-    tbody tr{
+    tbody tr {
         @apply border-b hover:bg-gray-50;
     }
-    tbody td{
-        @apply py-2 px-4 ;
+
+    tbody td {
+        @apply py-2 px-4;
     }
 }
 
@@ -123,7 +124,7 @@ html {
     .modal-input {
         @apply w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 col-span-3;
     }
-    
+
     .modal-button {
         @apply bg-gray-500 text-white px-4 py-2 rounded mt-2 w-full hover:bg-gray-600 dark:bg-gray-600 dark:hover:bg-gray-500;
     }
@@ -131,7 +132,7 @@ html {
     .modal-button-submit {
         @apply bg-blue-500 text-white px-4 py-2 rounded mt-2 w-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700;
     }
-    
+
     .modal-label {
         @apply block mb-1 font-medium dark:text-gray-300;
     }

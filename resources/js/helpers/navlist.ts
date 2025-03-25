@@ -14,12 +14,12 @@ export const mainNavItems: NavItem[] = [
     },
     {
         title: 'Platillos',
-        href: '/dashboard',
+        href: '/dishes',
         icon: Utensils,
     },
     {
         title: 'Ventas',
-        href: '/dashboard',
+        href: '/sales',
         icon: DollarSign,
     },
 ];

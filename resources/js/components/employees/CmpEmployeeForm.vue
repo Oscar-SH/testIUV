@@ -5,8 +5,11 @@ import { EmployeeInterface } from '@/interfaces/EmployeeInterface';
 const props = defineProps<{
     editing: boolean;
     employee: EmployeeInterface;
-    handleSubmit: () => Promise<void>;
 }>();
+
+const emit = defineEmits(["submit"]);
+const handleSubmit = () => { emit("submit"); };
+
 </script>
 
 <template>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dishes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->time('make_time');
             $table->decimal('make_price', 22, 2);
             $table->decimal('sale_price', 22, 2);

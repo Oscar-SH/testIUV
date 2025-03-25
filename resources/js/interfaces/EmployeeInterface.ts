@@ -1,5 +1,5 @@
-export interface EmployeeInterface{
-    id: number;
+export interface EmployeeInterface {
+    id?: number;
     name: string;
     address: string;
     phone: string;
@@ -11,8 +11,14 @@ export interface EmployeeInterface{
     sucursal: string;
 }
 
-export const initEmployeeInterface : EmployeeInterface = {
-    id: -1,
+export interface RowEmployeeInterface extends EmployeeInterface {
+    id: number;
+    created_at: string;
+    deleted_at: string;
+    updated_at: string;
+}
+
+export const initEmployeeInterface: EmployeeInterface = {
     name: '',
     address: '',
     phone: '',

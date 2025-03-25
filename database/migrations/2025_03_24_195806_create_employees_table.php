@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('phone');
             $table->string('email');
             $table->string('position');
-            $table->integer('nss', 11);
+            $table->integer('nss');
             $table->string('rfc', 13);
             $table->decimal('salary', 22, 2);
             $table->string('sucursal');

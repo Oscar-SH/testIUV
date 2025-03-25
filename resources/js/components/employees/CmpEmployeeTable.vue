@@ -2,10 +2,10 @@
 import axios from 'axios';
 import { defineProps } from 'vue';
 import { Pencil, Trash, RefreshCcw } from 'lucide-vue-next';
-import { EmployeeInterface } from '@/interfaces/EmployeeInterface';
+import { EmployeeInterface, RowEmployeeInterface } from '@/interfaces/EmployeeInterface';
 
 const props = defineProps<{
-    employees: EmployeeInterface[];
+    employees: RowEmployeeInterface[];
     fetchEmployees: () => Promise<void>;
     editEmployee: (emp: EmployeeInterface) => void;
 }>();

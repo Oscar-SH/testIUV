@@ -1,60 +1,60 @@
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Plus } from 'lucide-vue-next';
 import { type BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
-import CmpEmployeeForm from '@/components/employees/CmpEmployeeForm.vue';
-import CmpEmployeeTable from '@/components/employees/CmpEmployeeTable.vue';
-import { EmployeeInterface, initEmployeeInterface, RowEmployeeInterface } from '@/interfaces/EmployeeInterface';
+import CmpDishForm from '@/components/dishes/CmpDishForm.vue';
+import CmpDishesTable from '@/components/dishes/CmpDishesTable.vue';
+import { DishInterface, initDishInterface, RowDishInterface } from '@/interfaces/DishInterface';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 const showAll = ref(false);
 const editing = ref(false);
 const isModalOpen = ref(false);
-const employees = ref<RowEmployeeInterface[]>([]);
-const employee = ref(structuredClone(initEmployeeInterface));
+const dishes = ref<RowDishInterface[]>([]);
+const dish = ref(structuredClone(initDishInterface));
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Administrar Empleados',
-        href: '/employee',
+        title: 'Administrar Platillos',
+        href: '/dishes',
     }
 ];
 
-const fetchEmployees = async () => {
+const fetchDishes = async () => {
     try {
-        const res = await axios.get("/employees/all", { params: { deletes: showAll } });
-        employees.value = res.data;
+        const res = await axios.get("/dishes/all", { params: { deletes: showAll.value } });
+        dishes.value = res.data;
     } catch (error) {
-        console.error('Error fetching employees:', error);
+        console.error('Error fetching dishes:', error);
     }
 };
 
-const editEmployee = (emp: EmployeeInterface) => {
+const editDish = (emp: DishInterface) => {
     editing.value = true;
+    dish.value = { ...emp };
     isModalOpen.value = true;
-    employee.value = { ...emp };
 };
 
 const resetForm = () => {
     editing.value = false;
     isModalOpen.value = false;
-    employee.value = structuredClone(initEmployeeInterface);
+    dish.value = structuredClone(initDishInterface);
 };
 
 const handleSubmit = async () => {
     try {
         if (editing.value) {
-            await axios.put(`/employees/${employee.value.id}`, employee.value);
+            await axios.put(`/dishes/${dish.value.id}`, dish.value);
         } else {
-            await axios.post("/employees", employee.value);
+            await axios.post("/dishes", dish.value);
         }
         resetForm();
-        fetchEmployees();
+        fetchDishes();
     } catch (error) {
-        console.error('Error saving employee:', error);
+        console.error('Error saving dish:', error);
     }
 };
 
@@ -68,13 +68,16 @@ const handleOpenChange = (open: boolean) => {
 }
 
 onMounted(() => {
-    fetchEmployees();
+    fetchDishes();
+});
+watch(showAll, () => {
+    fetchDishes();
 });
 </script>
 
 <template>
 
-    <Head title="Usuarios" />
+    <Head title="Platillos" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Dialog v-model:open="isModalOpen" @update:open="handleOpenChange">
@@ -95,13 +98,13 @@ onMounted(() => {
                 <DialogContent class="max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
-                            {{ editing ? 'Editar Empleado' : 'Nuevo Empleado' }}
+                            {{ editing ? 'Editar Platillo' : 'Nuevo Platillo' }}
                         </DialogTitle>
                         <DialogDescription>
                             Completa todos los campos requeridos
                         </DialogDescription>
                     </DialogHeader>
-                    <CmpEmployeeForm :employee="employee" :editing="editing" @submit="handleSubmit" />
+                    <CmpDishForm :dish="dish" :editing="editing" @submit="handleSubmit" />
                     <DialogFooter>
                         <DialogClose asChild>
                             <button @click="resetForm" class="modal-button">
@@ -112,8 +115,8 @@ onMounted(() => {
                 </DialogContent>
             </Dialog>
             <div class="table-container">
-                <CmpEmployeeTable :employees="employees" :editEmployee="editEmployee" :fetchEmployees="fetchEmployees"
-                    @refetch="fetchEmployees" />
+                <CmpDishesTable :dishes="dishes" :edit-dish="editDish" :fetch-dishes="fetchDishes"
+                    @refetch="fetchDishes" />
             </div>
         </div>
     </AppLayout>

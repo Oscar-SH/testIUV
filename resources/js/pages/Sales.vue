@@ -1,60 +1,60 @@
 <script setup lang="ts">
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Plus } from 'lucide-vue-next';
+import { ref, onMounted, watch } from 'vue';
 import { type BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
-import CmpEmployeeForm from '@/components/employees/CmpEmployeeForm.vue';
-import CmpEmployeeTable from '@/components/employees/CmpEmployeeTable.vue';
-import { EmployeeInterface, initEmployeeInterface, RowEmployeeInterface } from '@/interfaces/EmployeeInterface';
+import CmpSaleForm from '@/components/sales/CmpSaleForm.vue';
+import CmpSalesTable from '@/components/sales/CmpSalesTable.vue';
+import { initSaleInterface, RowSaleInterface, SaleInterface } from '@/interfaces/SaleInterface';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 const showAll = ref(false);
 const editing = ref(false);
 const isModalOpen = ref(false);
-const employees = ref<RowEmployeeInterface[]>([]);
-const employee = ref(structuredClone(initEmployeeInterface));
+const sales = ref<RowSaleInterface[]>([]);
+const sale = ref(structuredClone(initSaleInterface));
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Administrar Empleados',
-        href: '/employee',
+        title: 'Administrar Ventas',
+        href: '/sales',
     }
 ];
 
-const fetchEmployees = async () => {
+const fetchSales = async () => {
     try {
-        const res = await axios.get("/employees/all", { params: { deletes: showAll } });
-        employees.value = res.data;
+        const res = await axios.get("/sales/all", { params: { deletes: showAll.value } });
+        sales.value = res.data;
     } catch (error) {
-        console.error('Error fetching employees:', error);
+        console.error('Error fetching sales:', error);
     }
 };
 
-const editEmployee = (emp: EmployeeInterface) => {
+const editSale = (emp: SaleInterface) => {
     editing.value = true;
+    sale.value = { ...emp };
     isModalOpen.value = true;
-    employee.value = { ...emp };
 };
 
 const resetForm = () => {
     editing.value = false;
     isModalOpen.value = false;
-    employee.value = structuredClone(initEmployeeInterface);
+    sale.value = structuredClone(initSaleInterface);
 };
 
 const handleSubmit = async () => {
     try {
         if (editing.value) {
-            await axios.put(`/employees/${employee.value.id}`, employee.value);
+            await axios.put(`/sales/${sale.value.id}`, sale.value);
         } else {
-            await axios.post("/employees", employee.value);
+            await axios.post("/sales", sale.value);
         }
         resetForm();
-        fetchEmployees();
+        fetchSales();
     } catch (error) {
-        console.error('Error saving employee:', error);
+        console.error('Error saving sale:', error);
     }
 };
 
@@ -65,16 +65,15 @@ const openModal = () => {
 const handleOpenChange = (open: boolean) => {
     if (!open) resetForm();
     isModalOpen.value = open
-}
+};
 
-onMounted(() => {
-    fetchEmployees();
-});
+watch(showAll, fetchSales);
+
+onMounted(() => { fetchSales(); });
 </script>
 
 <template>
-
-    <Head title="Usuarios" />
+    <Head title="Ventas" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <Dialog v-model:open="isModalOpen" @update:open="handleOpenChange">
@@ -95,13 +94,13 @@ onMounted(() => {
                 <DialogContent class="max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>
-                            {{ editing ? 'Editar Empleado' : 'Nuevo Empleado' }}
+                            {{ editing ? 'Editar Platillo' : 'Nuevo Platillo' }}
                         </DialogTitle>
                         <DialogDescription>
                             Completa todos los campos requeridos
                         </DialogDescription>
                     </DialogHeader>
-                    <CmpEmployeeForm :employee="employee" :editing="editing" @submit="handleSubmit" />
+                    <CmpSaleForm :sale="sale" :editing="editing" @submit="handleSubmit" />
                     <DialogFooter>
                         <DialogClose asChild>
                             <button @click="resetForm" class="modal-button">
@@ -112,8 +111,7 @@ onMounted(() => {
                 </DialogContent>
             </Dialog>
             <div class="table-container">
-                <CmpEmployeeTable :employees="employees" :editEmployee="editEmployee" :fetchEmployees="fetchEmployees"
-                    @refetch="fetchEmployees" />
+                <CmpSalesTable :sales="sales" :editSale="editSale" :fetchSales="fetchSales" @refetch="fetchSales" />
             </div>
         </div>
     </AppLayout>

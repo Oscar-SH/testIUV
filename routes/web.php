@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified'])->prefix('employees')->group(function () 
     Route::get('{id}', [EmployeeController::class, 'show'])->name('employees.show');
     Route::put('{id}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::patch('{id}', [EmployeeController::class, 'restore'])->name('employees.restore');
 });
 
 require __DIR__.'/settings.php';

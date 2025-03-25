@@ -2,22 +2,24 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
+import { Plus } from 'lucide-vue-next';
 import { type BreadcrumbItem } from '@/types';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Pencil, Trash, Plus } from 'lucide-vue-next';
 import CmpEmployeeForm from '@/components/employees/CmpEmployeeForm.vue';
+import CmpEmployeeTable from '@/components/employees/CmpEmployeeTable.vue';
 import { EmployeeInterface, initEmployeeInterface } from '@/interfaces/EmployeeInterface';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 const editing = ref(false);
 const isModalOpen = ref(false);
-const employee = ref(initEmployeeInterface);
+const employee = ref(structuredClone(initEmployeeInterface));
 const employees = ref<EmployeeInterface[]>([]);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Employees',
+        title: 'Administrar Empleados',
         href: '/employee',
-    },
+    }
 ];
 
 const fetchEmployees = async () => {
@@ -30,24 +32,15 @@ const fetchEmployees = async () => {
 };
 
 const editEmployee = (emp: EmployeeInterface) => {
-    employee.value = { ...emp };
     editing.value = true;
-};
-
-const deleteEmployee = async (id: number) => {
-    if (confirm("¿Seguro que quieres eliminar este empleado?")) {
-        try {
-            await axios.delete(`/employees/${id}`);
-            fetchEmployees();
-        } catch (error) {
-            console.error('Error deleting employee:', error);
-        }
-    }
+    isModalOpen.value = true;
+    employee.value = { ...emp };
 };
 
 const resetForm = () => {
-    employee.value = initEmployeeInterface;
     editing.value = false;
+    isModalOpen.value = false;
+    employee.value = ref(structuredClone(initEmployeeInterface));
 };
 
 const handleSubmit = async () => {
@@ -68,6 +61,11 @@ const openModal = () => {
     isModalOpen.value = true;
 };
 
+const handleOpenChange = (open) => {
+    if (!open) resetForm();
+    isModalOpen.value = open
+}
+
 onMounted(() => {
     fetchEmployees();
 });
@@ -78,48 +76,34 @@ onMounted(() => {
     <Head title="Usuarios" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="flex justify-between items-center mb-4">
-                <button @click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded flex">
-                    <Plus /> Agregar Empleado
-                </button>
-                <h1 class="text-2xl font-bold">Administrar Empleados</h1>
-            </div>
-            <div v-if="isModalOpen"
-                class=" {modal: true} fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-                <CmpEmployeeForm :employee="employee" :editing="editing" v-model:isModalOpen="isModalOpen"
-                    :handleSubmit="handleSubmit" :resetForm="resetForm" />
-            </div>
-            <div
-                class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <table class="min-w-full border border-gray-200 rounded-lg shadow-md">
-                    <thead>
-                        <tr class="bg-gray-100 text-left">
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Nombre</th>
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Email</th>
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Puesto</th>
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Sucursal</th>
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Salario</th>
-                            <th class="py-2 px-4 font-semibold text-sm text-gray-600">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="emp in employees" :key="emp.id" class="border-b hover:bg-gray-50">
-                            <td class="py-2 px-4">{{ emp.name }}</td>
-                            <td class="py-2 px-4">{{ emp.email }}</td>
-                            <td class="py-2 px-4">{{ emp.position }}</td>
-                            <td class="py-2 px-4">{{ emp.sucursal }}</td>
-                            <td class="py-2 px-4">${{ emp.salary.toFixed(2) }}</td>
-                            <td class="py-2 px-4">
-                                <button @click="editEmployee(emp)" class="text-blue-600 hover:text-blue-800 mr-2">
-                                    <Pencil />
-                                </button>
-                                <button @click="deleteEmployee(emp.id)" class="text-red-600 hover:text-red-800">
-                                    <Trash />
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <Dialog v-model:open="isModalOpen" @update:open="handleOpenChange">
+                <DialogTrigger asChild>
+                    <button @click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded flex">
+                        <Plus /> Agregar
+                    </button>
+                </DialogTrigger>
+                <DialogContent class="max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {{ editing ? 'Editar Empleado' : 'Nuevo Empleado' }}
+                        </DialogTitle>
+                        <DialogDescription>
+                            Completa todos los campos requeridos
+                        </DialogDescription>
+                    </DialogHeader>
+                    <CmpEmployeeForm :employee="employee" :editing="editing" @submit="handleSubmit" />
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <button @click="resetForm" class="modal-button">
+                                Cerrar
+                            </button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <div class="table-container">
+                <CmpEmployeeTable :employees="employees" :editEmployee="editEmployee"
+                    :fetchEmployees="fetchEmployees"  @refetch="fetchEmployees"/>
             </div>
         </div>
     </AppLayout>

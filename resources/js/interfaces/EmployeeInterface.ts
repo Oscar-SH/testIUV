@@ -6,7 +6,7 @@ export interface EmployeeInterface{
     email: string;
     position: string;
     nss: number;
-    rfc: number;
+    rfc: string;
     salary: number;
     sucursal: string;
 }
@@ -19,7 +19,7 @@ export const initEmployeeInterface : EmployeeInterface = {
     email: '',
     position: '',
     nss: 0,
-    rfc: 0,
+    rfc: '',
     salary: 0,
     sucursal: ''
 };

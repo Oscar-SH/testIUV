@@ -9,7 +9,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        return response()->json(Employee::all());
+        return response()->json(Employee::withTrashed()->get());
     }
 
     public function store(Request $request)
@@ -29,9 +29,17 @@ class EmployeeController extends Controller
         return response()->json(['message' => 'Empleado actualizado']);
     }
 
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
+        $employee = Employee::find($id);
         $employee->delete();
         return response()->json(['message' => 'Empleado eliminado']);
+    }
+
+    public function restore($id)
+    {
+        $employee = Employee::withTrashed()->find($id);
+        $employee->restore();
+        return response()->json(['message' => 'Empleado recuperado']);
     }
 }

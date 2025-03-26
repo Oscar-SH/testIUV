@@ -1,4 +1,4 @@
-import { RowDishInterface } from "./DishInterface";
+import { DishInterface, RowDishInterface } from "./DishInterface";
 import { RowEmployeeInterface } from "./EmployeeInterface";
 
 export interface SaleInterface {
@@ -6,7 +6,7 @@ export interface SaleInterface {
     table_number: number;
     tip: number;
     id_employee: number;
-    id_dish: number;
+    dishes: DishInterface[];
 }
 
 export interface RowSaleInterface extends SaleInterface {
@@ -14,7 +14,7 @@ export interface RowSaleInterface extends SaleInterface {
     created_at: string;
     deleted_at: string;
     updated_at: string;
-    dish: RowDishInterface;
+    dishes: RowDishInterface[];
     employee: RowEmployeeInterface;
 }
 
@@ -22,5 +22,5 @@ export const initSaleInterface: SaleInterface = {
     table_number: 0,
     tip: 0,
     id_employee: -1,
-    id_dish: -1
+    dishes: []
 };

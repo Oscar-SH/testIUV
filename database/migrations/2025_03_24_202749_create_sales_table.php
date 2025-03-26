@@ -15,11 +15,12 @@ return new class extends Migration {
             $table->integer('table_number');
             $table->decimal('tip', 22, 2);
             $table->foreignId('id_employee')->constrained(
-                 table: 'employees', indexName: 'sales_id_employee'
+                table: 'employees',
+                indexName: 'sales_id_employee'
             );
-            $table->foreignId('id_dish')->constrained(
-                 table: 'dishes', indexName: 'sales_id_dish'
-            );
+            // $table->foreignId('id_dish')->constrained(
+            //      table: 'dishes', indexName: 'sales_id_dish'
+            // );
             $table->timestamps();
             $table->softDeletes();
         });

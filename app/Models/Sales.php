@@ -16,15 +16,14 @@ class Sales extends Model
     protected $fillable = [
         'table_number',
         'tip',
-        'id_employee',
-        'id_dish'
+        'id_employee'
     ];
 
-    public function employee(){
-        return $this->belongsTo(Employee::class, 'id_employee', 'id');
+    public function employee() {
+        return $this->belongsTo(Employee::class, 'id_employee');
     }
-
-    public function dish(){
-        return $this->belongsTo(Dishes::class, 'id_dish', 'id');
+    
+    public function dishes() {
+        return $this->belongsToMany(Dishes::class, 'sales_dishes', 'id_sale', 'id_dish');
     }
 }

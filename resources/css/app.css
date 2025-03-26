@@ -110,6 +110,23 @@ html {
     tbody td {
         @apply py-2 px-4;
     }
+
+    .subtable {
+        @apply text-xs max-w-full table-auto;
+    }
+
+    .subtable td,
+    .subtable th {
+        @apply py-1 px-2;
+    }
+
+    .subtable th {
+        @apply text-sm;
+    }
+
+    .subtable tbody tr {
+        @apply border-b hover:bg-gray-50;
+    }
 }
 
 @layer components {

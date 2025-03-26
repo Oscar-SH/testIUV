@@ -21,4 +21,8 @@ class Dishes extends Model
         'sale_price',
         'status'
     ];
+
+    public function sales() {
+        return $this->belongsToMany(Sales::class, 'sales_dishes', 'id_dish', 'id_sale');
+    }
 }

@@ -36,6 +36,10 @@ const restoreSale = async (id: number) => {
         }
     }
 };
+
+const calculateTotal = (dishes) => {
+    return dishes.reduce((total, dish) => total + parseFloat(dish.sale_price), 0).toFixed(2) ?? 0;
+}
 </script>
 
 <template>
@@ -56,10 +60,28 @@ const restoreSale = async (id: number) => {
                 :style="sale.deleted_at ? { 'backgroundColor': 'rgba(246, 211, 211, 0.5)' } : {}">
                 <td>{{ sale.table_number }}</td>
                 <td>{{ sale.employee.name }}</td>
-                <td>{{ sale.dish.name }}</td>
+                <td>
+                    <table class="subtable">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="dish in sale.dishes" :key="dish.id">
+                                <td>{{ dish.name }}</td>
+                                <td>{{ dish.sale_price }}</td>
+                            </tr>
+                            <tr class="text-right">
+                                <td colspan="2">Total: ${{ calculateTotal(sale.dishes) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
                 <td>${{ sale.tip.toFixed(2) }}</td>
-                <td>{{ moment.utc(sale.created_at).format('LL').toUpperCase() }}</td>
-                <td>{{ moment.utc(sale.created_at).format('HH:ss') }}</td>
+                <td>{{ moment(sale.created_at).format('LL').toUpperCase() }}</td>
+                <td>{{ moment(sale.created_at).format('HH:ss') }}</td>
                 <td>
                     <button v-if="!sale.deleted_at" @click="editSale(sale)"
                         class="text-blue-600 hover:text-blue-800 mr-2">

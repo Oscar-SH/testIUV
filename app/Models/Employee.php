@@ -24,4 +24,9 @@ class Employee extends Model
         'salary',
         'sucursal'
     ];
+
+    public function sales() {
+        return $this->hasMany(Sales::class, 'id_employee');
+    }
+    
 }

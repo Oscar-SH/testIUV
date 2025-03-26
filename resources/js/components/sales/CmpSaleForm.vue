@@ -4,6 +4,8 @@ import { defineProps, onMounted, ref } from 'vue';
 import { SaleInterface } from '@/interfaces/SaleInterface';
 import { RowDishInterface } from '@/interfaces/DishInterface';
 import { RowEmployeeInterface } from '@/interfaces/EmployeeInterface';
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 
 defineProps<{
     editing: boolean;
@@ -54,13 +56,9 @@ onMounted(() => { fetchEmployees(); fetchDishes(); });
             </select>
         </div>
         <div class="modal-content">
-            <label class="modal-label">Platillo:</label>
-            <select v-model="sale.id_dish" class="form-select modal-input">
-                <option disabled value="">Selecciona una opción</option>
-                <option v-for="option in optionsDishes" :key="option.id" :value="option.id">
-                    {{ option.name }}
-                </option>
-            </select>
+            <label class="modal-label">Platillos:</label>
+            <multiselect v-model="sale.dishes" :options="optionsDishes" :multiple="true" :clear-on-select="false"
+                label="name" track-by="id" class="modal-input" />
         </div>
         <div class="modal-content">
             <label class="modal-label">Propina:</label>

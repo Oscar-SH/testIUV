@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
+        "@types/file-saver": "^2.0.7",
         "@types/node": "^22.13.5",
         "@types/vue-select": "^3.16.8",
         "@vue/eslint-config-typescript": "^14.3.0",
@@ -27,10 +28,13 @@
         "@inertiajs/vue3": "^2.0.0-beta.3",
         "@vitejs/plugin-vue": "^5.2.1",
         "@vueuse/core": "^12.0.0",
+        "apexcharts": "^4.5.0",
         "autoprefixer": "^10.4.20",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "concurrently": "^9.0.1",
+        "exceljs": "^4.4.0",
+        "file-saver": "^2.0.5",
         "laravel-vite-plugin": "^1.0",
         "lucide": "^0.468.0",
         "lucide-vue-next": "^0.468.0",
@@ -43,6 +47,7 @@
         "vite": "^6.2.0",
         "vue": "^3.5.13",
         "vue-multiselect": "^3.2.0",
+        "vue3-apexcharts": "^1.8.0",
         "ziggy-js": "^2.4.2"
     },
     "optionalDependencies": {

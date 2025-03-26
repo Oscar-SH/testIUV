@@ -47,6 +47,9 @@ Route::middleware(['auth', 'verified'])->prefix('sales')->group(function () {
     Route::put('{id}', [SalesController::class, 'update'])->name('sales.update');
     Route::delete('{id}', [SalesController::class, 'destroy'])->name('sales.destroy');
     Route::patch('{id}', [SalesController::class, 'restore'])->name('sales.restore');
+    Route::get('/graph', [SalesController::class, 'getDataGraphic'])->name('sales.graph');
+    Route::get('/tables', [SalesController::class, 'getCatTables'])->name('sales.tables');
+    Route::get('/excel', [SalesController::class, 'getDataExcel'])->name('sales.excel');
 });
 
 require __DIR__ . '/settings.php';

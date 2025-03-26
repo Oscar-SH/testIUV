@@ -24,3 +24,13 @@ export const initSaleInterface: SaleInterface = {
     id_employee: -1,
     dishes: []
 };
+
+
+export interface SalesExcelInterface {
+    employee: string;
+    hour: number;
+    table_number: number;
+    total_tip: number;
+    total_sale: number;
+    total: number;
+}

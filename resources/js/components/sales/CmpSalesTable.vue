@@ -2,6 +2,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import { defineProps } from 'vue';
+import { DishInterface } from '@/interfaces/DishInterface';
 import { Pencil, Trash, RefreshCcw } from 'lucide-vue-next';
 import { RowSaleInterface, SaleInterface } from '@/interfaces/SaleInterface';
 
@@ -37,8 +38,8 @@ const restoreSale = async (id: number) => {
     }
 };
 
-const calculateTotal = (dishes) => {
-    return dishes.reduce((total, dish) => total + parseFloat(dish.sale_price), 0).toFixed(2) ?? 0;
+const calculateTotal = (dishes: DishInterface[]) => {
+    return dishes.reduce((total, dish) => total + parseFloat(String(dish.sale_price)), 0).toFixed(2) ?? 0;
 }
 </script>
 

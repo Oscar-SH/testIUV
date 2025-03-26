@@ -127,6 +127,12 @@ html {
     .subtable tbody tr {
         @apply border-b hover:bg-gray-50;
     }
+
+    .input-date {
+        @apply dark:bg-gray-700 dark:border-gray-600;
+        position: relative;
+        padding: 20px;
+    }
 }
 
 @layer components {
@@ -147,7 +153,7 @@ html {
     }
 
     .modal-button-submit {
-        @apply bg-blue-500 text-white px-4 py-2 rounded mt-2 w-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700;
+        @apply bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700;
     }
 
     .modal-label {

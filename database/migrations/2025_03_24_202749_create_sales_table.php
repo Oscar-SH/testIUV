@@ -18,9 +18,6 @@ return new class extends Migration {
                 table: 'employees',
                 indexName: 'sales_id_employee'
             );
-            // $table->foreignId('id_dish')->constrained(
-            //      table: 'dishes', indexName: 'sales_id_dish'
-            // );
             $table->timestamps();
             $table->softDeletes();
         });
